@@ -1,0 +1,55 @@
+<ng-container *ngIf="result?.def as definitions">
+  <div *ngIf="definitions.length > 0; then thenBlock; else elseBlock"></div>
+  <ng-template #thenBlock>
+    <h1 class="custom-heading">Translation results</h1>
+    <div *ngFor="let definition of result?.def">
+      <div class="card-container" *ngIf="definition.tr" class="card-content">
+        <div style="text-align: center">
+          <strong class="card-header">{{ definition.pos }}</strong>
+        </div>
+        <ul>
+          <li
+            class="card"
+            *ngFor="let translation of definition.tr; let i = index"
+          >
+            <p>
+              <strong>{{ translation.text }}</strong>
+            </p>
+            <div class="d-flex flex-row">
+              <div *ngIf="translation.syn && translation.syn.length > 0">
+                <p>Synonyms:</p>
+                <ul>
+                  <li *ngFor="let syn of translation.syn">
+                    {{ syn.text }}
+                  </li>
+                </ul>
+              </div>
+              <div *ngIf="translation.mean && translation.mean.length > 0">
+                <p>Meaning:</p>
+                <ul>
+                  <li *ngFor="let mean of translation.mean">
+                    {{ mean.text }}
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </ng-template>
+  <ng-template #elseBlock>
+    <div style="display: flex; flex-direction: column; justify-content: center; align-items: center">
+      <img
+        class="mx-auto"
+        style="height: 30rem"
+        src="assets/3po.png"
+        alt="3PO from Star Wars"
+      />
+      <h1>
+        "I speak six million forms of communication, but the dialect is
+        puzzling."
+      </h1>
+    </div>
+  </ng-template>
+</ng-container>

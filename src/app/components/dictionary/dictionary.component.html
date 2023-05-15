@@ -1,0 +1,80 @@
+<mat-toolbar color="primary">
+  <span class="toolbar-title">Dictionary App</span>
+</mat-toolbar>
+
+<div class="container">
+  <div class="form-group">
+    <mat-form-field appearance="outline">
+      <mat-label>Enter text</mat-label>
+      <input
+        matInput
+        type="text"
+        id="text"
+        [(ngModel)]="text"
+        [formControl]="textFormControl"
+        placeholder="Enter a word!"
+      />
+    </mat-form-field>
+  </div>
+
+  <div class="form-group">
+    <mat-form-field appearance="outline">
+      <mat-label>Select from language</mat-label>
+      <mat-select
+        id="fromLang"
+        [(ngModel)]="selectedFromLanguage"
+        (selectionChange)="onFromLanguageSelected()"
+      >
+        <mat-option
+          *ngFor="let fromLang of fromLanguageOptions$ | async"
+          [value]="fromLang"
+        >
+          {{ fromLang.fullName }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div class="form-group">
+    <mat-form-field appearance="outline">
+      <mat-label>Select to language</mat-label>
+      <mat-select id="toLang" [(ngModel)]="selectedToLanguage">
+        <mat-option
+          *ngFor="let toLang of toLanguageOptions$ | async"
+          [value]="toLang"
+        >
+          {{ toLang.fullName }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <button
+    mat-raised-button
+    color="primary"
+    (click)="translateText()"
+    [disabled]="
+      !selectedFromLanguage || !selectedToLanguage || textFormControl.invalid
+    "
+  >
+    Translate
+  </button>
+
+  <div
+    style="margin: 1rem; color: red"
+    *ngIf="
+      textFormControl.invalid &&
+      (textFormControl.dirty || textFormControl.touched)
+    "
+  >
+    <strong>
+      {{ getErrorMessage() }}
+    </strong>
+  </div>
+</div>
+
+<div class="container">
+  <app-translation-results
+    [result]="dictionaryResult$ | async"
+  ></app-translation-results>
+</div>
